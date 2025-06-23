@@ -139,6 +139,7 @@ local function createInputSection(titleText, statName, needsReo)
             if valueObj and valueObj:IsA("StringValue") then
                 valueObj.Value = textBox.Text
             end
+            toggle.Text = "Ativado"
             if needsReo then
                 local msg = Instance.new("TextLabel", ScreenGui)
                 msg.Text = "Necessita de REO Para Funcionar"
@@ -160,6 +161,7 @@ end
 createInputSection("Estilo:", "Style", true)
 createInputSection("Fluxo:", "Flow", false)
 
+-- Função para criar toggles booleanos
 local function createMiscButton(labelText, valueName)
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(1, 0, 0, 40)
@@ -187,12 +189,15 @@ local function createMiscButton(labelText, valueName)
     btn.TextSize = 13
     Instance.new("UICorner", btn)
 
+    local state = false
     btn.MouseButton1Click:Connect(function()
+        state = not state
+        btn.Text = state and "Ativado" or "Ativar"
         local stats = LocalPlayer:FindFirstChild("PlayerStats")
         if stats and stats:FindFirstChild(valueName) then
             local val = stats[valueName]
             if val and val:IsA("BoolValue") then
-                val.Value = not val.Value
+                val.Value = state
             end
         end
     end)
@@ -201,62 +206,53 @@ end
 createMiscButton("Despertar", "InAwakening")
 createMiscButton("FlowBuffs", "InFlow")
 
-local function createStaminaSection()
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 0, 40)
-    frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    frame.Parent = contentList
-    Instance.new("UICorner", frame)
+-- Stamina infinita
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(1, 0, 0, 40)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.Parent = contentList
+Instance.new("UICorner", frame)
 
-    local label = Instance.new("TextLabel", frame)
-    label.Size = UDim2.new(0.6, 0, 1, 0)
-    label.Position = UDim2.new(0.05, 0, 0, 0)
-    label.Text = "Stamina Infinita"
-    label.TextColor3 = Color3.new(1, 1, 1)
-    label.Font = Enum.Font.GothamBold
-    label.TextSize = 14
-    label.BackgroundTransparency = 1
-    label.TextXAlignment = Enum.TextXAlignment.Left
+local label = Instance.new("TextLabel", frame)
+label.Size = UDim2.new(0.6, 0, 1, 0)
+label.Position = UDim2.new(0.05, 0, 0, 0)
+label.Text = "Stamina Infinita"
+label.TextColor3 = Color3.new(1, 1, 1)
+label.Font = Enum.Font.GothamBold
+label.TextSize = 14
+label.BackgroundTransparency = 1
+label.TextXAlignment = Enum.TextXAlignment.Left
 
-    local toggle = Instance.new("TextButton", frame)
-    toggle.Size = UDim2.new(0.25, 0, 0.6, 0)
-    toggle.Position = UDim2.new(0.7, 0, 0.2, 0)
-    toggle.Text = "Ativar"
-    toggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    toggle.TextColor3 = Color3.new(1, 1, 1)
-    toggle.Font = Enum.Font.GothamBold
-    toggle.TextSize = 13
-    Instance.new("UICorner", toggle)
+local btn = Instance.new("TextButton", frame)
+btn.Size = UDim2.new(0.25, 0, 0.6, 0)
+btn.Position = UDim2.new(0.7, 0, 0.2, 0)
+btn.Text = "Ativar"
+btn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+btn.TextColor3 = Color3.new(1, 1, 1)
+btn.Font = Enum.Font.GothamBold
+btn.TextSize = 13
+Instance.new("UICorner", btn)
 
-    local infinite = false
-    toggle.MouseButton1Click:Connect(function()
-        infinite = not infinite
-        toggle.Text = infinite and "Ativado" or "Ativar"
-        while infinite do
-            local stats = LocalPlayer:FindFirstChild("PlayerStats")
-            if stats and stats:FindFirstChild("Stamina") then
-                local val = stats.Stamina
-                if val and val:IsA("NumberValue") then
-                    val.Value = 10000
-                end
+local running = false
+btn.MouseButton1Click:Connect(function()
+    running = not running
+    btn.Text = running and "Ativado" or "Ativar"
+    while running do
+        local stats = LocalPlayer:FindFirstChild("PlayerStats")
+        if stats and stats:FindFirstChild("Stamina") then
+            local val = stats.Stamina
+            if val and val:IsA("NumberValue") then
+                val.Value = 10000
             end
-            task.wait(0.1)
         end
-    end)
-end
-
-createStaminaSection()
+        task.wait(0.1)
+    end
+end)
 
 -- Tecla M para abrir/fechar GUI
 local guiVisible = true
 UserInputService.InputBegan:Connect(function(input, gp)
     if gp then return end
-    if input.KeyCode == Enum.KeyCode.M then
-        guiVisible = not guiVisible
-        MainFrame.Visible = guiVisible
-    end
-end)
-
     if input.KeyCode == Enum.KeyCode.M then
         guiVisible = not guiVisible
         MainFrame.Visible = guiVisible
