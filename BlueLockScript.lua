@@ -5,12 +5,56 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
--- Remove o script de ban do servidor
-local banScript = game:GetService("ReplicatedStorage"):FindFirstChild("CmdrConfig")
+-- Remove scripts de kick e ban
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Remove banServer
+local banScript = ReplicatedStorage:FindFirstChild("CmdrConfig")
 if banScript and banScript:FindFirstChild("Commands") then
     local commands = banScript:FindFirstChild("Commands")
     if commands:FindFirstChild("banServer") then
         commands.banServer:Destroy()
+    end
+end
+
+-- Remove KickServer do Cmdr
+local cmdrPkg = ReplicatedStorage:FindFirstChild("Packages")
+if cmdrPkg then
+    local cmdr = cmdrPkg:FindFirstChild("Cmdr")
+    if cmdr and cmdr:FindFirstChild("Server") then
+        local srv = cmdr:FindFirstChild("Server")
+        if srv:FindFirstChild("Commands") then
+            local cmds = srv.Commands
+            if cmds:FindFirstChild("Admin") and cmds.Admin:FindFirstChild("KickServer") then
+                cmds.Admin.KickServer:Destroy()
+            end
+        end
+    end
+end
+
+-- Remove Kick de CmdrClient
+local clientCmdr = ReplicatedStorage:FindFirstChild("CmdrClient")
+if clientCmdr and clientCmdr:FindFirstChild("Packages") then
+    local pkg = clientCmdr:FindFirstChild("Packages")
+    if pkg:FindFirstChild("Kick") then
+        pkg.Kick:Destroy()
+    end
+end
+
+-- Remove Knit > Services > LTM Service > RE > PlayerKicked e RF > KickPlayer
+local knit = ReplicatedStorage:FindFirstChild("Knit")
+if knit then
+    local services = knit:FindFirstChild("Services")
+    if services then
+        local ltm = services:FindFirstChild("LTMService")
+        if ltm then
+            if ltm:FindFirstChild("RE") and ltm.RE:FindFirstChild("PlayerKicked") then
+                ltm.RE.PlayerKicked:Destroy()
+            end
+            if ltm:FindFirstChild("RF") and ltm.RF:FindFirstChild("KickPlayer") then
+                ltm.RF.KickPlayer:Destroy()
+            end
+        end
     end
 end
 
@@ -116,7 +160,6 @@ end
 createInputSection("Estilo:", "Style", true)
 createInputSection("Fluxo:", "Flow", false)
 
--- Função de botão para valores booleanos
 local function createMiscButton(labelText, valueName)
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(1, 0, 0, 40)
@@ -158,7 +201,6 @@ end
 createMiscButton("Despertar", "InAwakening")
 createMiscButton("FlowBuffs", "InFlow")
 
--- Stamina infinita
 local function createStaminaSection()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(1, 0, 0, 40)
@@ -209,6 +251,12 @@ createStaminaSection()
 local guiVisible = true
 UserInputService.InputBegan:Connect(function(input, gp)
     if gp then return end
+    if input.KeyCode == Enum.KeyCode.M then
+        guiVisible = not guiVisible
+        MainFrame.Visible = guiVisible
+    end
+end)
+
     if input.KeyCode == Enum.KeyCode.M then
         guiVisible = not guiVisible
         MainFrame.Visible = guiVisible
