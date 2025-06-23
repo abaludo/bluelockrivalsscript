@@ -56,7 +56,7 @@ end
 
 -- Criar GUI principal
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "BlueLockScriptGui"
+ScreenGui.Name = "Shyon Hub"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = PlayerGui
 
