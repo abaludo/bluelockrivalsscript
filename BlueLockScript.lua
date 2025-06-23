@@ -206,49 +206,6 @@ end
 createMiscButton("Despertar", "InAwakening")
 createMiscButton("FlowBuffs", "InFlow")
 
--- Stamina infinita
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(1, 0, 0, 40)
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-frame.Parent = contentList
-Instance.new("UICorner", frame)
-
-local label = Instance.new("TextLabel", frame)
-label.Size = UDim2.new(0.6, 0, 1, 0)
-label.Position = UDim2.new(0.05, 0, 0, 0)
-label.Text = "Stamina Infinita"
-label.TextColor3 = Color3.new(1, 1, 1)
-label.Font = Enum.Font.GothamBold
-label.TextSize = 14
-label.BackgroundTransparency = 1
-label.TextXAlignment = Enum.TextXAlignment.Left
-
-local btn = Instance.new("TextButton", frame)
-btn.Size = UDim2.new(0.25, 0, 0.6, 0)
-btn.Position = UDim2.new(0.7, 0, 0.2, 0)
-btn.Text = "Ativar"
-btn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-btn.TextColor3 = Color3.new(1, 1, 1)
-btn.Font = Enum.Font.GothamBold
-btn.TextSize = 13
-Instance.new("UICorner", btn)
-
-local running = false
-btn.MouseButton1Click:Connect(function()
-    running = not running
-    btn.Text = running and "Ativado" or "Ativar"
-    while running do
-        local stats = LocalPlayer:FindFirstChild("PlayerStats")
-        if stats and stats:FindFirstChild("Stamina") then
-            local val = stats.Stamina
-            if val and val:IsA("NumberValue") then
-                val.Value = 100
-            end
-        end
-        task.wait(0.5)
-    end
-end)
-
 -- Tecla M para abrir/fechar GUI
 local guiVisible = true
 UserInputService.InputBegan:Connect(function(input, gp)
