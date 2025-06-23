@@ -242,10 +242,10 @@ btn.MouseButton1Click:Connect(function()
         if stats and stats:FindFirstChild("Stamina") then
             local val = stats.Stamina
             if val and val:IsA("NumberValue") then
-                val.Value = 10000
+                val.Value = 100
             end
         end
-        task.wait(0.1)
+        task.wait(0.5)
     end
 end)
 
